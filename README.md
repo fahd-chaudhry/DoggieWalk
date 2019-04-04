@@ -6,12 +6,19 @@
 - `vagrant provision` (Only needed if you have run vagrant up before and made changes) <p>
 - `vagrant ssh` <p>
 - `cd project` <p>
-- `run **gunicorn --bind 0.0.0.0:5002 wsgi**` <p>
+- `python doggiewalk.py` <p>
+
+
+#### The url we use: <p>
+- `0.0.0.0:5002`
+	
+#### Sample user credentials: <p>
+- Email: `user1@sfu.ca`
+- Password: `123456`
 
 ### Troubleshooting help: <p>
-Error: `Cannot connect to port 5002, port already in use` 
-Solution: `run **fuser -k 5002/tcp > /dev/null 2>&1; exit 0**` 
-
+Error: `Cannot connect to port 5002, port already in use` <p>
+Solution: `run **fuser -k 5002/tcp > /dev/null 2>&1; exit 0**` <p> 
 
 ### Technologies used:
 - **Gunicorn** ‘Green Unicorn’ is a Python WSGI HTTP Server for UNIX. 
@@ -19,10 +26,6 @@ Solution: `run **fuser -k 5002/tcp > /dev/null 2>&1; exit 0**`
 - **Vagrant**
 - **Python**
 - **Flask** 
-
-#### Sample user credentials: <p>
-- Email: `user1@sfu.ca`
-- Password: `123456`
 
 #### Addtional functions: <p>
 - Users get email notifications when they register as a new user and when they receive messages from other users.
@@ -33,11 +36,9 @@ Solution: `run **fuser -k 5002/tcp > /dev/null 2>&1; exit 0**`
 	- search dogs by breed
 - Users can give other users reviews but not themselves
 
-#### The url we use: <p>
-- `0.0.0.0:5002`
-
-Main code is in: doggiewalk.py <p>
-Feel free to modularize the code. <p>
+#### Other: <p>
+- Main code is in: doggiewalk.py
+- Feel free to modularize the code.
 
 ### Contact Information: <p>
 - Fahd Chaudhry: `fahd.chaudhry@yahoo.com`
