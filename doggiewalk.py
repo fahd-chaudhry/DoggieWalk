@@ -85,12 +85,6 @@ def makeImageDirectories(user_id):
 
 # This function will helps us add dummy data to our database
 def dummy_db_data():
-    userA = User.query.filter_by(email="mchaudhr@sfu.ca").first()
-    userB = User.query.filter_by(email="schugh@sfu.ca").first()
-    user1 = User.query.filter_by(email="user1@sfu.ca").first()
-    user2 = User.query.filter_by(email="user2@sfu.ca").first()
-    user3 = User.query.filter_by(email="user3@sfu.ca").first()
-
     # Add dummy users
     safe_add_user(User(email="mchaudhr@sfu.ca",
             password=sha256_crypt.hash("123456"),
@@ -142,16 +136,21 @@ def dummy_db_data():
             latitude='49.26773',
             longitude='-123.07707'))
 
+    userA = User.query.filter_by(email="mchaudhr@sfu.ca").first()
+    userB = User.query.filter_by(email="schugh@sfu.ca").first()
+    user1 = User.query.filter_by(email="user1@sfu.ca").first()
+    user2 = User.query.filter_by(email="user2@sfu.ca").first()
+    user3 = User.query.filter_by(email="user3@sfu.ca").first()
     # Dummy data for dogs
     safe_add_dog(Dog(name="Rover",
                 age=7,
                 breed="German Shepherd",
-                owner="mchaudhr@sfu.ca"
+                owner=userA.email
                 ))
     safe_add_dog(Dog(name="Coco",
                 age=4,
                 breed="German Shepherd",
-                owner="mchaudhr@sfu.ca"
+                owner=userA.email
                 ))
     safe_add_dog(Dog(name="Lily",
                 age=4,
@@ -161,7 +160,7 @@ def dummy_db_data():
     safe_add_dog(Dog(name="Rusty",
                 age=2,
                 breed="Corgi",
-                owner="user1@sfu.ca"
+                owner=user1.email
                 ))
 
     safe_add_dog(Dog(name="Petunia",
