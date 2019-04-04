@@ -1,5 +1,13 @@
 # Basic Flask Functionality should be added to this file
 import os
+import logging
+import psycopg2
+import datetime
+import time
+import base64
+import re
+import uuid
+import shutil
 from flask import Flask, render_template, flash, redirect, url_for, session, logging, request
 from flask.ext.sqlalchemy import SQLAlchemy
 from wtforms import *
@@ -8,20 +16,10 @@ from flask.ext.via import Via
 from functools import wraps
 from sqlalchemy.dialects.postgresql import JSON
 from models import db, User, mail, Event, Review, Dm, Dog
-import psycopg2
 from flask.ext.mail import Mail, Message
 from flask_socketio import SocketIO, send, emit
 from io import BytesIO
 from shutil import copyfile
-import logging
-import psycopg2
-import datetime
-import time
-import base64
-import os
-import re
-import uuid
-import shutil
 
 POSTGRES = {
     'user': 'vagrant',
@@ -48,7 +46,6 @@ app.config['MAIL_USE_TLS'] = False
 app.config['MAIL_USE_SSL'] = True
 via = Via()
 via.init_app(app)
-
 db.init_app(app)
 app.app_context().push()
 db.create_all()
@@ -88,7 +85,13 @@ def makeImageDirectories(user_id):
 
 # This function will helps us add dummy data to our database
 def dummy_db_data():
-    # Deleting all existing users will cause ids to change
+    userA = User.query.filter_by(email="mchaudhr@sfu.ca").first()
+    userB = User.query.filter_by(email="schugh@sfu.ca").first()
+    user1 = User.query.filter_by(email="user1@sfu.ca").first()
+    user2 = User.query.filter_by(email="user2@sfu.ca").first()
+    user3 = User.query.filter_by(email="user3@sfu.ca").first()
+
+    # Add dummy users
     safe_add_user(User(email="mchaudhr@sfu.ca",
             password=sha256_crypt.hash("123456"),
             first_name="Fahd",
@@ -101,10 +104,10 @@ def dummy_db_data():
 
     safe_add_user(User(email="schugh@sfu.ca",
             password=sha256_crypt.hash("123456"),
-            first_name="Siddharth",
+            first_name="Sidd",
             last_name="Chugh",
             date_of_birth="01/02/1999",
-            city = 'West Vancouver',
+            city = 'North Vancouver',
             willing_to_walk = "No",
             latitude='49.328625',
             longitude='-123.160198'))
@@ -114,7 +117,7 @@ def dummy_db_data():
             first_name="User",
             last_name="One",
             date_of_birth="01/02/1999",
-            city = 'Vancouver',
+            city = 'Surrey',
             willing_to_walk = "Yes",
             latitude='49.26967',
             longitude='-123.07725'))
@@ -124,7 +127,7 @@ def dummy_db_data():
             first_name="User",
             last_name="Two",
             date_of_birth="01/02/1999",
-            city = 'Vancouver',
+            city = 'Coquitlam',
             willing_to_walk = "Yes",
             latitude='49.26866',
             longitude='-123.07865'))
@@ -134,25 +137,17 @@ def dummy_db_data():
             first_name="User",
             last_name="Three",
             date_of_birth="01/02/1999",
-            city = 'Vancouver',
+            city = 'Richmond',
             willing_to_walk = "Yes",
             latitude='49.26773',
             longitude='-123.07707'))
-    
-    userA = User.query.filter_by(email="mchaudhr@sfu.ca").first()
-    userB = User.query.filter_by(email="schugh@sfu.ca").first()
-    user1 = User.query.filter_by(email="user1@sfu.ca").first()
-    user2 = User.query.filter_by(email="user2@sfu.ca").first()
-    user3 = User.query.filter_by(email="user3@sfu.ca").first()
-    
-    # Dummy data for dog1 for fahd
+
+    # Dummy data for dogs
     safe_add_dog(Dog(name="Rover",
                 age=7,
                 breed="German Shepherd",
                 owner="mchaudhr@sfu.ca"
                 ))
-
-    # Dummy data for dog2 for Fahd
     safe_add_dog(Dog(name="Coco",
                 age=4,
                 breed="German Shepherd",
@@ -190,6 +185,7 @@ def dummy_db_data():
                 owner="user3@sfu.ca"
                 ))
 
+    # Dummy data for reviews
     safe_add_review(Review(
                 rating=5,
                 title="Love 'em",
@@ -209,8 +205,8 @@ def dummy_db_data():
                 ))
     safe_add_review(Review(
                 rating=3,
-                title="Meh meh",
-                comment="asdfasdf",
+                title="All good",
+                comment="They are alright, nothing special. They got the job done at walking my dog",
                 authorid=user2.id,
                 receiverid=userB.id
                 ))
